@@ -1,0 +1,12 @@
+body{font-family: Arial, Helvetica, sans-serif; margin:0; padding:0}
+.app header{background:#1f2937;color:white;padding:12px}
+.layout{display:flex;height:calc(100vh - 64px)}
+aside{width:300px;border-right:1px solid #ddd;padding:12px;overflow:auto}
+main{flex:1;padding:12px;overflow:auto}
+.ns-list{list-style:none;padding:0}
+.ns-list li{padding:8px;border-bottom:1px solid #eee;cursor:pointer;display:flex;justify-content:space-between}
+.ns-list li.selected{background:#eef}
+.resources{display:flex;gap:24px}
+.logs-pane{display:flex;gap:12px}
+.pods-list{min-width:200px}
+pre{background:#111;color:#0f0;padding:8px;height:300px;overflow:auto}

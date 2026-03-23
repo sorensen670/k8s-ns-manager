@@ -1,0 +1,32 @@
+version: "3.8"
+
+services:
+  backend:
+    build:
+      context: ./backend
+    image: k8s-manager-backend:local
+    container_name: k8s-manager-backend
+    ports:
+      - "8000:8000"
+    environment:
+      - PYTHONUNBUFFERED=1
+      - KUBECONFIG=/kube/config
+    volumes:
+      # Set KUBECONFIG_PATH in your shell if your kubeconfig is not at $HOME/.kube/config
+      - ${KUBECONFIG_PATH:-$HOME/.kube/config}:/kube/config:ro
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./frontend
+    image: k8s-manager-frontend:local
+    container_name: k8s-manager-frontend
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    restart: unless-stopped
+
+networks:
+  default:
+    name: k8s-manager-net

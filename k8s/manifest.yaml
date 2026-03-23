@@ -1,0 +1,146 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: k8s-manager
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: backend-env
+  namespace: k8s-manager
+data:
+  KUBECONFIG: /etc/kubernetes/kubeconfig
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: k8s-manager-backend
+  namespace: k8s-manager
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: k8s-manager-backend
+  template:
+    metadata:
+      labels:
+        app: k8s-manager-backend
+    spec:
+      serviceAccountName: k8s-manager-backend
+      containers:
+      - name: backend
+        image: k8s-manager-backend:latest
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 8000
+        env:
+        - name: PYTHONUNBUFFERED
+          value: "1"
+        livenessProbe:
+          httpGet:
+            path: /docs
+            port: 8000
+          initialDelaySeconds: 10
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /docs
+            port: 8000
+          initialDelaySeconds: 5
+          periodSeconds: 5
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: k8s-manager-backend
+  namespace: k8s-manager
+spec:
+  selector:
+    app: k8s-manager-backend
+  ports:
+  - protocol: TCP
+    port: 8000
+    targetPort: 8000
+  type: ClusterIP
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: k8s-manager-frontend
+  namespace: k8s-manager
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: k8s-manager-frontend
+  template:
+    metadata:
+      labels:
+        app: k8s-manager-frontend
+    spec:
+      containers:
+      - name: frontend
+        image: k8s-manager-frontend:latest
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 3000
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 3000
+          initialDelaySeconds: 10
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 3000
+          initialDelaySeconds: 5
+          periodSeconds: 5
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: k8s-manager-frontend
+  namespace: k8s-manager
+spec:
+  selector:
+    app: k8s-manager-frontend
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 3000
+  type: LoadBalancer
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: k8s-manager-backend
+  namespace: k8s-manager
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: k8s-manager-backend
+rules:
+- apiGroups: [""]
+  resources: ["namespaces", "pods", "services", "events", "resourcequotas"]
+  verbs: ["get", "list", "watch"]
+- apiGroups: ["apps"]
+  resources: ["deployments", "statefulsets", "daemonsets"]
+  verbs: ["get", "list", "watch"]
+- apiGroups: [""]
+  resources: ["pods/log"]
+  verbs: ["get"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: k8s-manager-backend
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: k8s-manager-backend
+subjects:
+- kind: ServiceAccount
+  name: k8s-manager-backend
+  namespace: k8s-manager
