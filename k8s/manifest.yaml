@@ -29,7 +29,7 @@ spec:
       serviceAccountName: k8s-manager-backend
       containers:
       - name: backend
-        image: k8s-manager-backend:latest
+        image: docker.io/sorensen670/k8s-ns-manager-backend:4468b3b3f0c00681bad53bed2756e81df33e04d9
         imagePullPolicy: Never
         ports:
         - containerPort: 8000
@@ -48,6 +48,13 @@ spec:
             port: 8000
           initialDelaySeconds: 5
           periodSeconds: 5
+        resources:
+          limits:
+            cpu: "500m"
+            memory: "256Mi"
+          requests:
+            cpu: "250m"
+            memory: "128Mi"
 ---
 apiVersion: v1
 kind: Service
@@ -80,7 +87,7 @@ spec:
     spec:
       containers:
       - name: frontend
-        image: k8s-manager-frontend:latest
+        image: docker.io/sorensen670/k8s-ns-manager-frontend:4468b3b3f0c00681bad53bed2756e81df33e04d9
         imagePullPolicy: Never
         ports:
         - containerPort: 3000
@@ -96,6 +103,13 @@ spec:
             port: 3000
           initialDelaySeconds: 5
           periodSeconds: 5
+        resources:
+          limits:
+            cpu: "500m"
+            memory: "256Mi"
+          requests:
+            cpu: "250m"
+            memory: "128Mi"
 ---
 apiVersion: v1
 kind: Service
