@@ -1,3 +1,4 @@
+import os
 from fastapi import FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
 from typing import Optional
@@ -5,9 +6,12 @@ from k8s_client import get_client
 
 app = FastAPI(title="Kubernetes Namespace Manager API")
 
+_raw_origins = os.getenv("CORS_ORIGINS", "http://localhost:5173,http://localhost:3000")
+allowed_origins = [o.strip() for o in _raw_origins.split(",")]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173", "http://localhost:3000"],
+    allow_origins=allowed_origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
