@@ -30,7 +30,7 @@ spec:
       containers:
       - name: backend
         image: docker.io/sorensen670/k8s-ns-manager-backend:4468b3b3f0c00681bad53bed2756e81df33e04d9
-        imagePullPolicy: Never
+        imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 8000
         env:
@@ -88,7 +88,7 @@ spec:
       containers:
       - name: frontend
         image: docker.io/sorensen670/k8s-ns-manager-frontend:4468b3b3f0c00681bad53bed2756e81df33e04d9
-        imagePullPolicy: Never
+        imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 3000
         livenessProbe:
