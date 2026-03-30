@@ -3,17 +3,34 @@ on:
   # push:
   #   branches: [main]
   workflow_dispatch:
+    inputs:
+      build_backend:
+        description: 'Build and push backend image'
+        required: true
+        default: true
+        type: boolean
+      build_frontend:
+        description: 'Build and push frontend image'
+        required: true
+        default: true
+        type: boolean
+      update-k8s:
+        description: 'Update Kubernetes manifests with new image tags'
+        required: true
+        default: true
+        type: boolean
 
 jobs:
   build-backend:
     runs-on: ubuntu-latest
+    if: ${{ inputs.build_backend }}
     steps:
-      - uses: actions/checkout@v4
-      - uses: docker/login-action@v3
+      - uses: actions/checkout@v6
+      - uses: docker/login-action@v4
         with:
           username: ${{ vars.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
-      - uses: docker/build-push-action@v5
+      - uses: docker/build-push-action@v7
         with:
           context: ./backend
           push: true
@@ -23,13 +40,14 @@ jobs:
 
   build-frontend:
     runs-on: ubuntu-latest
+    if: ${{ inputs.build_frontend }}
     steps:
-      - uses: actions/checkout@v4
-      - uses: docker/login-action@v3
+      - uses: actions/checkout@v6
+      - uses: docker/login-action@v4
         with:
           username: ${{ vars.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
-      - uses: docker/build-push-action@v5
+      - uses: docker/build-push-action@v7
         with:
           context: ./frontend
           push: true

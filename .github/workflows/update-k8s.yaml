@@ -1,0 +1,33 @@
+name: update-k8s
+on:
+  workflow_call:
+    inputs:
+      build_backend:
+        description: 'Build and push backend image'
+        required: true
+        default: true
+        type: boolean
+      build_frontend:
+        description: 'Build and push frontend image'
+        required: true
+        default: true
+        type: boolean
+      backend_image:
+        description: 'Backend image tag to use in Kubernetes manifests'
+        required: true
+        type: string
+      frontend_image:
+        description: 'Frontend image tag to use in Kubernetes manifests'
+        required: true
+        type: string
+
+jobs:
+  update-k8s:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Update Kubernetes manifests
+        run: |
+          if [ "${{ inputs.build_backend }}" ]; then
