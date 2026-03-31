@@ -1,0 +1,20 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: k8s-ns-manager
+  namespace: argocd 
+spec:
+  project: default # default project allows access to all namespaces, but you can create a custom project if you want to restrict access
+  source:
+    repoURL: https://github.com/sorensen670/k8s-ns-manager
+    targetRevision: HEAD
+    path: k8s # This is the path within the repo where your Kubernetes manifests are located
+  destination:
+    server: https://kubernetes.default.svc # This is the in-cluster API server URL, use this when deploying ArgoCD in the same cluster as your application
+    namespace: k8s-manager # The namespace where your application will be deployed
+  syncPolicy:
+    automated: # Automatically sync changes from Git to the cluster
+      prune: true # Automatically delete resources that are no longer defined in Git
+      selfHeal: true # Automatically revert changes made directly in the cluster that diverge from Git
+    syncOptions:
+      - CreateNamespace=true # Automatically create the namespace if it doesn't exist
