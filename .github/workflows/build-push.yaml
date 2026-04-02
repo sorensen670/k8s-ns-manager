@@ -54,3 +54,12 @@ jobs:
           tags: |
             sorensen670/k8s-ns-manager-frontend:${{ github.sha }}
             sorensen670/k8s-ns-manager-frontend:latest
+
+  update-k8s:
+    uses: ./.github/workflows/update-k8s.yaml
+    if: ${{ inputs.update-k8s }}
+    with:
+      build_backend: ${{ inputs.build_backend }}
+      build_frontend: ${{ inputs.build_frontend }}
+      backend_image: docker.io/sorensen670/k8s-ns-manager-backend:${{ github.sha }}
+      frontend_image: docker.io/sorensen670/k8s-ns-manager-frontend:${{ github.sha }}
