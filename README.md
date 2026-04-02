@@ -26,13 +26,20 @@ Images are built and pushed to Docker Hub via GitHub Actions and deployed to a l
 ├── frontend/           # Vite + React SPA
 │   ├── src/
 │   │   ├── App.jsx
+│   │   ├── main.jsx
+│   │   ├── styles.css
 │   │   └── components/
 │   │       ├── NamespaceList.jsx
 │   │       └── NamespaceDetails.jsx
+│   ├── index.html
+│   ├── package.json
+│   ├── vite.config.js
 │   ├── nginx.conf      # Production proxy (forwards /api/ to backend)
 │   └── Dockerfile      # Multi-stage: npm build ➜ nginx
 ├── k8s/
 │   └── manifest.yaml   # Namespace, Deployments, Services, RBAC
+├── argocd/
+│   └── application.yaml  # ArgoCD Application manifest
 ├── compose.yml         # Local Docker Compose stack
 └── README.md
 ```
