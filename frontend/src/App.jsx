@@ -13,7 +13,7 @@ export default function App(){
 
   return (
     <div className="app">
-      <header><h1>Kubernetes Namespace Manager v1.0.0</h1></header>
+      <header><h1>Kubernetes Namespace Manager v1.0.1</h1></header>
       <div className="layout">
         <aside>
           <NamespaceList namespaces={namespaces} onSelect={setSelected} selected={selected} />
