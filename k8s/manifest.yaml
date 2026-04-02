@@ -29,7 +29,7 @@ spec:
       serviceAccountName: k8s-manager-backend
       containers:
       - name: backend
-        image: docker.io/sorensen670/k8s-ns-manager-backend:5731acaeca95d2636bcc43fc60d0350459b4d5f6
+        image: docker.io/sorensen670/k8s-ns-manager-backend:16789e2f4cb0b093bb156249e17e4dd2b6fe3bbe
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 8000
@@ -87,7 +87,7 @@ spec:
     spec:
       containers:
       - name: frontend
-        image: docker.io/sorensen670/k8s-ns-manager-frontend:5731acaeca95d2636bcc43fc60d0350459b4d5f6
+        image: docker.io/sorensen670/k8s-ns-manager-frontend:16789e2f4cb0b093bb156249e17e4dd2b6fe3bbe
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 3000
