@@ -5,17 +5,17 @@ on:
   workflow_dispatch:
     inputs:
       build_backend:
-        description: 'Build and push backend image'
+        description: '🛠️Build and push backend image'
         required: true
         default: true
         type: boolean
       build_frontend:
-        description: 'Build and push frontend image'
+        description: '🎨Build and push frontend image'
         required: true
         default: true
         type: boolean
       update-k8s:
-        description: 'Update Kubernetes manifests with new image tags'
+        description: '⚙️Update Kubernetes manifests with new image tags'
         required: true
         default: true
         type: boolean
