@@ -58,6 +58,7 @@ jobs:
   update-k8s:
     uses: ./.github/workflows/update-k8s.yaml
     if: ${{ inputs.update-k8s }}
+    needs: [build-backend, build-frontend]
     with:
       build_backend: ${{ inputs.build_backend }}
       build_frontend: ${{ inputs.build_frontend }}
